@@ -1,7 +1,7 @@
 <template>
     <div class="relative pb-4">
         <label :for="name" class="pt-2 absolute uppercase font-bold text-blue-500 text-xs">{{ label }}</label>
-        <input type="text" :id="name" :placeholder="placeholder" class="text-gray-900 pt-8 w-full border-b pb-2 focus:outline-none focus:border-blue-400" v-model="value" @input="updateField()">
+        <input type="text" :id="name" :placeholder="placeholder" class="text-gray-900 pt-8 w-full border-b pb-2 focus:outline-none focus:border-blue-400" :class="errorClassObject()" v-model="value" @input="updateField()">
         <p class="text-red-600 text-sm" v-text="errorMessage(name)">Error Here</p>
     </div>
 </template>
@@ -11,7 +11,7 @@ export default {
     name: "InputField",
 
     props: [
-        'name', 'label', 'placeholder', 'errors'
+        'name', 'label', 'placeholder', 'errors', 'data',
     ],
 
     data: function () {
@@ -28,7 +28,7 @@ export default {
 
     methods: {
         updateField: function () {
-            this.clearErrros(this.name);
+            this.clearErrors(this.name);
 
             this.$emit('update:field', this.value)
         },
@@ -45,10 +45,16 @@ export default {
             }
         },
 
-        errorClassobject: function () {
+        errorClassObject: function () {
             return {
                 'error-field': this.hasError
             }
+        }
+    },
+    
+    watch: {
+        data: function (val) {
+            this.value = val;
         }
     }
 }
